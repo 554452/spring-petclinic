@@ -12,13 +12,13 @@ pipeline {
             echo 'Git Clone'
             git url: 'https://github.com/554452/spring-petclinic.git',
             branch : 'main', credentialsId: 'gitCredentials'
-            }
             post {
                 success {
                     echo 'Git Clone success'
             }
                 failure {
                     echo 'Git Clone fail'
+                }
             }
         }
         stage('Build') {
