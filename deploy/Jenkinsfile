@@ -25,8 +25,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Build'
-                sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            echo 'Build'
+            sh 'mvn -Dmaven.test.failure.ignore=true clean package'
             }
             post {
                 success {
@@ -43,13 +43,30 @@ pipeline {
         
         stage('Docker Push') {
             steps {
-        echo 'Docker Push'
+            echo 'Docker Push'
             }
         }    
 
         stage('Target CD') {
             steps {
             echo 'Target CD'
+            sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
+            transfers: [sshTransfer(cleanRemote: false, excludes: '', 
+            execCommand: '''
+            fuser -k 8080/tcp export BULID_ID=PetClinic
+            nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
+            execTimeout: 120000, 
+            flatten: false, 
+            makeEmptyDirs: false, 
+            noDefaultExcludes: false, 
+            patternSeparator: '[, ]+', 
+            remoteDirectory: '', 
+            remoteDirectorySDF: false, 
+            removePrefix: 'target', 
+            sourceFiles: 'target/*.jar')], 
+            usePromotionTimestamp: false, 
+            useWorkspaceInPromotion: false, 
+            verbose: false)])
             }
         }
     }
