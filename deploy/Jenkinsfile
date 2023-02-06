@@ -35,9 +35,9 @@ pipeline {
             }
         }
 
-        stage('Docker Bulid') {
+        stage('Docker Image') {
             steps {
-            echo 'Dokcer Bulid'
+            echo 'Dokcer Image'
             }
         }
         
@@ -72,6 +72,6 @@ pipeline {
             verbose: false)])
             }
         }
-        
+
     }
 }
