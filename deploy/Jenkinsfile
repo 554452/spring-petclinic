@@ -22,6 +22,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build') {
             steps {
                 echo 'Build'
@@ -33,19 +34,22 @@ pipeline {
                 }      
             }
         }
-        stage('Docker Image') {
+
+        stage('Docker Bulid') {
             steps {
-            echo 'Dokcer Image'
+            echo 'Dokcer Bulid'
             }
         }
+        
         stage('Docker Push') {
             steps {
         echo 'Docker Push'
             }
         }    
-        stage('Target Pull') {
+
+        stage('Target CD') {
             steps {
-            echo 'Target Pull'
+            echo 'Target CD'
             }
         }
     }
