@@ -38,8 +38,6 @@ pipeline {
                 sourceFiles: 'target/*.jar')], 
                 usePromotionTimestamp: false, 
                 useWorkspaceInPromotion: false, verbose: false)])
-                
-                
             }
         }
     }
