@@ -1,74 +1,32 @@
 pipeline {
     agent any
-
+    
     tools {
-        maven "M3"
-        jdk "JDK11"
+        maven 'M3'
+        jdk 'JDK11'
     }
-
+    
     stages {
-        stage('Git Clone') {
+        stage('git init') {
             steps {
-            echo 'Git Clone'
-            git url: 'https://github.com/554452/spring-petclinic.git',
-            branch : 'main', credentialsId: 'gitCredentials'
+                echo 'Git Init'
+                git url: 'https://github.com/554452/spring-petclinic.git/',
+                branch: 'main', credentialsId: 'gitCredentals'
             }
-            post {
-                success {
-                    echo 'Git Clone success'
-            }
-                failure {
-                    echo 'Git Clone fail'
-                }
+        }
+    
+        stage('Bulid') {
+            steps {
+                echo 'Bulid'
+                sh 'mvn -Dmaven.test.failure.ignore=true clean package'            
             }
         }
 
-        stage('Build') {
+        stage('Deploy') {
             steps {
-            echo 'Build'
-            sh 'mvn -Dmaven.test.failure.ignore=true clean package'
-            }
-            post {
-                success {
-                junit 'target/surefire-reports/**/*.xml'
-                }      
+                echo 'Deploy'
             }
         }
-
-        stage('Docker Image') {
-            steps {
-            echo 'Dokcer Image'
-            }
-        }
-        
-        stage('Docker Push') {
-            steps {
-            echo 'Docker Push'
-            }
-        }    
-
-        stage('Target CD') {
-            steps {
-            echo 'Target CD'
-            sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
-            transfers: [sshTransfer(cleanRemote: false, excludes: '', 
-            execCommand: '''
-            fuser -k 8080/tcp export BULID_ID=PetClinic
-            nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
-            execTimeout: 120000, 
-            flatten: false, 
-            makeEmptyDirs: false, 
-            noDefaultExcludes: false, 
-            patternSeparator: '[, ]+', 
-            remoteDirectory: 'deploy', 
-            remoteDirectorySDF: false, 
-            removePrefix: 'target', 
-            sourceFiles: 'target/*.jar')], 
-            usePromotionTimestamp: false, 
-            useWorkspaceInPromotion: false, 
-            verbose: false)])
-            }
-        }
-
     }
+    
 }
