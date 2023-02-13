@@ -1,2 +1,2 @@
 # spring-petclinic
-Min kyum
+AWS-Min kyun
