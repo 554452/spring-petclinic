@@ -21,6 +21,6 @@ hooks:
 
   ApplicationStart:
     - location: scripts/run_process.sh
-      tumeout: 3600
+      timeout: 3600
       runas: ubuntu
      
